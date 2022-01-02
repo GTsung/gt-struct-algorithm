@@ -1,6 +1,7 @@
 package com.gt.struct.stack;
 
-import main.java.gt.struct.list.MyArrayList;
+
+import com.gt.struct.list.MyArrayList;
 
 /**
  * @author GTsung

@@ -1,6 +1,7 @@
 package com.gt.struct.list;
 
-import main.java.gt.struct.queue.MyDeque;
+
+import com.gt.struct.queue.MyDeque;
 
 import java.util.NoSuchElementException;
 
