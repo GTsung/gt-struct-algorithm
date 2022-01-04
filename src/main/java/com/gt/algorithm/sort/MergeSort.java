@@ -32,7 +32,7 @@ public class MergeSort {
     private static void sort(int[] arr, int leftPos, int rightPos, int rightEnd, int[] temp) {
         int leftEnd = rightPos - 1;
         int tempPos = leftPos;
-
+        // 需要排序的元素个数
         int elementNum = rightEnd - leftPos + 1;
 
         while (leftPos <= leftEnd && rightPos <= rightEnd) {
@@ -44,7 +44,7 @@ public class MergeSort {
         while (rightPos <= rightEnd) {
             temp[tempPos++] = arr[rightPos++];
         }
-
+        // 只需要复制排列元素个数次即可，rightPos、leftPos都已经发生了变化，因此从最右端开始排
         for (int i = 0; i < elementNum; i++, rightEnd--) {
             arr[rightEnd] = temp[rightEnd];
         }
