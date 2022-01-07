@@ -9,6 +9,12 @@ import java.util.concurrent.*;
 public class TestSingleton {
 
 
+    /**
+     * 单例模式: 只生成一个实例，另外最好懒加载(不然如果没有用到单例则会浪费内存)
+     *
+     * enum枚举也可以实现单例
+     */
+
     static class Single {
         private Single() {
         }
