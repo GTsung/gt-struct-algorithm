@@ -13,7 +13,7 @@ public class BubbleSort {
     // 总共需要n-1轮(n为数组长度)，每轮比较n-i-1次(i为当前轮数)
     public static void main(String[] args) {
         int[] arr = {12, 34, 11, 2, 7, 53, 1, 25, 25, 19};
-        int[] brr = bubbleSort(arr);
+        int[] brr = bubbleSort2(arr);
         Arrays.stream(brr).forEach(System.out::println);
     }
 
@@ -25,6 +25,7 @@ public class BubbleSort {
      * 第四次i=3; 需要至多比较1次(剩下2个数进行比较)
      * 排序完成
      * 总共n-1轮比较，每轮比较次数为n-1-i
+     *
      * @param arr
      * @return
      */
@@ -40,5 +41,28 @@ public class BubbleSort {
             }
         }
         return arr;
+    }
+
+    // 将排好序的最大数放在最后一位
+    private static int[] bubbleSort2(int[] arr) {
+        for (int i = arr.length - 1; i > 0; i--) {
+            for (int j = 0; j < i; j++) {
+                if (arr[j] > arr[j + 1]) {
+                    swap(arr, j, j + 1);
+                }
+            }
+        }
+        return arr;
+    }
+
+    // 异或运算: a^0 = a; a^a = 0;
+    // a ^= b; ---> a = a^b
+    // b ^= a; ---> b = b^(a^b) = 0 ^ a = a;
+    // a ^= b; ---> a = (a ^ b) ^ a = b;
+    // 异或运算能交换数值的前提: a与b所在内存不是一块
+    private static void swap(int[] arr, int j, int k) {
+        arr[j] ^= arr[k];
+        arr[k] ^= arr[j];
+        arr[j] ^= arr[k];
     }
 }
