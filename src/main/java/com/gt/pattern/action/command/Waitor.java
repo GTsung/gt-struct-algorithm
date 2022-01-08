@@ -16,9 +16,10 @@ public class Waitor {
     }
 
     public void orderUp() {
-        System.out.println("新订单来了");
+
 
         commands.forEach(c -> {
+            System.out.println("新订单来了");
             if (c != null) {
                 c.execute();
             }
