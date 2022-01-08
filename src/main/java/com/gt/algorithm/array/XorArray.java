@@ -46,7 +46,7 @@ public class XorArray {
             // 如果此时在某个位上依然异或为1，那么arr[i]就是另一个出现奇数次的数
             // arr[i] & (00000001) ---> 如果异或成功为1，那么arr[i]为另一个数
             if ((arr[i] & rightOne) == 1) {
-                onlyOne ^= arr[i]; 
+                onlyOne ^= arr[i];
             }
         }
         System.out.println(onlyOne + "," + (res ^ onlyOne));
