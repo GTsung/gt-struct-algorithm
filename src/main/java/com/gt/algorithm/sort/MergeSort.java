@@ -20,6 +20,15 @@ public class MergeSort {
         merge(arr, 0, arr.length - 1, new int[arr.length]);
     }
 
+    /**
+     * master公式: T(N) = a * T(N/b) + O(N^d)
+     * 归并排序: T(N) = 2 * T(N/2) + O(N) ---> a=2,b=2,d=1
+     * log(b, a) = d ----> 复杂度为O(N^d * logN) 即O(nlogn)
+     * @param arr
+     * @param left
+     * @param right
+     * @param temp
+     */
     private static void merge(int[] arr, int left, int right, int[] temp) {
         if (left < right) {
             int mid = (left + right) / 2;
