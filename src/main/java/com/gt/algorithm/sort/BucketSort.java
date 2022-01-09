@@ -1,7 +1,7 @@
 package com.gt.algorithm.sort;
 
 /**
- * 桶排序
+ * 桶排序（基数排序）
  * @author GTsung
  * @date 2022/1/9
  */
@@ -22,7 +22,7 @@ public class BucketSort {
     // 排序完成
 
     public static void main(String[] args) {
-        
+
     }
 
 }
