@@ -12,7 +12,7 @@
 
     快排          O(nlogn)    O(logn)     N
 
-    堆            O(nlogn)    O(1)        Y
+    堆            O(nlogn)    O(1)        N
 
     ····
         优先使用快排
