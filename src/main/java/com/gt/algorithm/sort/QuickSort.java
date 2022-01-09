@@ -3,7 +3,7 @@ package com.gt.algorithm.sort;
 import java.util.Arrays;
 
 /**
- * 快速排序 O(nlogn)
+ * 快速排序 时间复杂度O(nlogn) 平均空间复杂度O(logn)最差O(N)
  * 随机选取一个基准数，划分数组的小于等于大于区域
  * 将小于区域左移并置换 最后将基准数放入到小于区域的前一位，返回基准数的下标
  * @author GTsung
