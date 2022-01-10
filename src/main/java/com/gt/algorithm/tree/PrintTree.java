@@ -212,9 +212,7 @@ public class PrintTree {
 
     private static boolean isFull(TreeNode root) {
         FullReturn fullReturn = fullProcess(root);
-        int height = fullReturn.height;
-        int nodes = fullReturn.nodes;
-        return nodes == Math.pow(2, height) - 1;
+        return fullReturn.nodes == Math.pow(2, fullReturn.height) - 1;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////
