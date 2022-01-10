@@ -1,9 +1,6 @@
 package com.gt.algorithm.tree;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 
 /**
  * @author GTsung
@@ -39,7 +36,12 @@ public class PrintTree {
         }
     }
 
-    // 找出最大宽度
+    /**
+     * 最大宽度
+     *
+     * @param root
+     * @return
+     */
     private static int countNodes(TreeNode root) {
         if (root == null) {
             return 0;
@@ -75,8 +77,171 @@ public class PrintTree {
                 queue.offer(cur.right);
             }
         }
-
         return max;
-
     }
+
+
+    /**
+     * 判断是否是二叉搜索树(左子树小于父节点，右子树大于父节点)
+     * 中序遍历: 左父右顺序遍历，如果是升序则表示是二叉搜索树
+     */
+    private static int preValue = Integer.MIN_VALUE;
+
+    private static boolean isBST(TreeNode root) {
+        if (root == null) {
+            return true;
+        }
+        boolean isLeftBST = isBST(root.left);
+        if (!isLeftBST) {
+            return false;
+        }
+        // 左中右打印值，上一个值为当前值的左子树，因此应该为preValue < curValue
+        if (root.value < preValue) {
+            return false;
+        } else {
+            preValue = root.value;
+        }
+        return isBST(root.right);
+    }
+    ///////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * 递归求解是否为二叉搜索树
+     */
+    static class BSTReturn {
+        boolean isBST;
+        int max;
+        int min;
+
+        public BSTReturn(boolean isBST, int max, int min) {
+            this.isBST = isBST;
+            this.max = max;
+            this.min = min;
+        }
+    }
+
+    private static BSTReturn bstProcess(TreeNode root) {
+        if (root == null) return null;
+        BSTReturn leftReturn = bstProcess(root.left);
+        BSTReturn rightReturn = bstProcess(root.right);
+
+        int min = root.value;
+        int max = root.value;
+        if (leftReturn != null) {
+            min = Math.min(min, leftReturn.min);
+            max = Math.max(max, leftReturn.max);
+        }
+        if (rightReturn != null) {
+            min = Math.min(min, rightReturn.min);
+            max = Math.max(max, rightReturn.max);
+        }
+        boolean isBST = true;
+        if (leftReturn != null && (!leftReturn.isBST || leftReturn.max > root.value)) {
+            isBST = false;
+        }
+        if (rightReturn != null && (!rightReturn.isBST || rightReturn.min < root.value)) {
+            isBST = false;
+        }
+        return new BSTReturn(isBST, max, min);
+    }
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * 判断是否是完全二叉树
+     * 宽度遍历: 如果只有右孩子无左孩子则false; 如果当前节点是一个左右节点不双全的节点，那么之后的其他节点均为子节点
+     *
+     * @param root
+     * @return
+     */
+    private static boolean isCBT(TreeNode root) {
+        if (root == null) return true;
+        Queue<TreeNode> queue = new LinkedList<>();
+        // 是否遇到左右子节点不双全的节点
+        boolean leaf = false;
+        TreeNode left = null;
+        TreeNode right = null;
+        queue.offer(root);
+        while (!queue.isEmpty()) {
+            root = queue.poll();
+            left = root.left;
+            right = root.right;
+
+            // 如果遇到了一个左右子节点不双全的节点之后，其他节点不为叶子节点则false
+            // 或者当前节点有右无左则false
+            if ((leaf && (left != null || right != null))
+                    || (left == null && right != null)) {
+                return false;
+            }
+
+            if (left != null) {
+                queue.offer(left);
+            }
+            if (right != null) {
+                queue.offer(right);
+            }
+            // 遇到了左右不双全
+            if (left == null || right == null) {
+                leaf = true;
+            }
+        }
+        return true;
+    }
+/////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * 判断是否是满二叉树
+     */
+    static class FullReturn {
+        int height;
+        int nodes;
+
+        public FullReturn(int height, int nodes) {
+            this.height = height;
+            this.nodes = nodes;
+        }
+    }
+
+    private static FullReturn fullProcess(TreeNode root) {
+        if (root == null) return new FullReturn(0, 0);
+        FullReturn leftReturn = fullProcess(root.left);
+        FullReturn rightReturn = fullProcess(root.right);
+        int height = Math.max(leftReturn.height, rightReturn.height) + 1;
+        int nodes = leftReturn.nodes + rightReturn.nodes + 1;
+        return new FullReturn(height, nodes);
+    }
+
+    private static boolean isFull(TreeNode root) {
+        FullReturn fullReturn = fullProcess(root);
+        int height = fullReturn.height;
+        int nodes = fullReturn.nodes;
+        return nodes == Math.pow(2, height) - 1;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * 判断是否为平衡二叉树
+     */
+    static class ReturnType {
+        public boolean isBalanced;
+        public int height;
+
+        public ReturnType(boolean isBalanced, int height) {
+            this.isBalanced = isBalanced;
+            this.height = height;
+        }
+    }
+
+    private static ReturnType process(TreeNode root) {
+        if (root == null) {
+            return new ReturnType(true, 0);
+        }
+        ReturnType leftData = process(root.left);
+        ReturnType rightData = process(root.right);
+        int height = Math.max(leftData.height, rightData.height) + 1;
+        boolean isBalanced = leftData.isBalanced && rightData.isBalanced
+                && Math.abs(leftData.height - rightData.height) < 2;
+        return new ReturnType(isBalanced, height);
+    }
+
 }
