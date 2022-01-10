@@ -121,5 +121,7 @@ public class PrintGraph {
         return result;
     }
 
+    // 最小生成树
+    // https://blog.csdn.net/a2392008643/article/details/81781766
 
 }
