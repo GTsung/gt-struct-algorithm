@@ -5,13 +5,14 @@ import java.util.*;
 
 /**
  * 图
+ *
  * @author GTsung
  * @date 2022/1/10
  */
 public class Graph {
 
-    Map<Integer, Node> nodes;
-    Set<Edge> edges;
+    public Map<Integer, Node> nodes;
+    public Set<Edge> edges;
 
     public Graph() {
         nodes = new HashMap<>();
@@ -23,7 +24,9 @@ public class Graph {
      */
     public static class Node {
         public int value;
+        // 入度
         public int in;
+        // 出度
         public int out;
         // 属于此节点的边A->B  那么A的nexts中包含B 而B的nexts中无
         public List<Node> nexts;
