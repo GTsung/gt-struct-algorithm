@@ -66,6 +66,25 @@ public class FilePathDemo {
 
     }
 
+    private static void fileCopy() throws Exception {
+        String source = "D:\\test";
+        String target = "D:\\test_copy";
+        Files.walk(Paths.get(source)).forEach(path -> {
+            // 将源文件地址替换成目标文件地址
+            String targetName = path.toString().replace(source, target);
+            try {
+                if (Files.isDirectory(path)) {
+                    // 新建文件夹
+                    Files.createDirectory(Paths.get(targetName));
+                } else if (Files.isRegularFile(path)) {
+                    Files.copy(path, Paths.get(targetName));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
     private static void visitFile() {
         // 遍历File目录树
         Path rootPath = Paths.get("d:\\a");
@@ -81,7 +100,7 @@ public class FilePathDemo {
 
                 @Override
                 public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                    String fileString  = file.toAbsolutePath().toString();
+                    String fileString = file.toAbsolutePath().toString();
                     System.out.println(fileString);
 
                     if (fileString.endsWith(fileToFind)) {
