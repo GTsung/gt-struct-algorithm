@@ -9,7 +9,7 @@ import java.nio.file.attribute.BasicFileAttributes;
  * @author GTsung
  * @date 2021/12/24
  */
-public class FileDemo {
+public class FilePathDemo {
 
     public static void main(String[] args) {
         // 获取路径
