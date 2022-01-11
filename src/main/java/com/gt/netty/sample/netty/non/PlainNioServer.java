@@ -1,4 +1,4 @@
-package com.gt.netty.sample.non;
+package com.gt.netty.sample.netty.non;
 
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
