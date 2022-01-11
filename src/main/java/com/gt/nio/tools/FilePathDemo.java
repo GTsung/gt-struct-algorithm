@@ -61,11 +61,24 @@ public class FilePathDemo {
             e.printStackTrace();
         }
 
+
+        visitFile();
+
+    }
+
+    private static void visitFile() {
         // 遍历File目录树
         Path rootPath = Paths.get("d:\\a");
         String fileToFind = File.separator + "01.sql";
         try {
             Files.walkFileTree(rootPath, new SimpleFileVisitor<Path>() {
+
+                @Override
+                public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                    // 目录
+                    return super.preVisitDirectory(dir, attrs);
+                }
+
                 @Override
                 public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
                     String fileString  = file.toAbsolutePath().toString();
@@ -82,7 +95,6 @@ public class FilePathDemo {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
 }
