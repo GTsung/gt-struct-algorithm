@@ -30,9 +30,15 @@ public class FileChannelDemo {
 
         RandomAccessFile bFile = new RandomAccessFile("b.txt", "rw");
         FileChannel toChannel = bFile.getChannel();
-        // 将fromChannel的数据传输到toChannel
-        toChannel.transferFrom(fromChannel, 0, fromChannel.size());
-        // fromChannel.transferTo(0, fromChannel.size(), toChannel);
+
+        long left = 0;
+        long size = fromChannel.size();
+        for (left = size; left > 0; ) {
+             left -= fromChannel.transferTo((size - left), left, toChannel);
+        }
+// 将fromChannel的数据传输到toChannel,不能超过2G
+//            toChannel.transferFrom(fromChannel, 0, fromChannel.size());
+
         aFile.close();
         bFile.close();
     }
