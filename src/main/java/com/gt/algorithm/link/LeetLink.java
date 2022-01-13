@@ -152,5 +152,21 @@ public class LeetLink {
         }
     }
 
+    /**
+     * 判斷鏈表是否有環
+     */
+    private static boolean isCircle(ListNode node) {
+        if (node == null) return false;
+        ListNode fast = node;
+        ListNode slow = node;
+        while (true) {
+            fast = fast == null ? null : fast.next == null ? null : fast.next.next;
+            slow = slow == null ? null : slow.next;
+            if (slow == fast) {
+                break;
+            }
+        }
+        return slow != null;
+    }
 
 }
