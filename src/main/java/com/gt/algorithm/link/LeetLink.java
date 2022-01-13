@@ -271,4 +271,55 @@ public class LeetLink {
         return h1;
     }
 
+    /**
+     * 合并兩個升序的鏈表為一個升序鏈表
+     *
+     * @param n1
+     * @param n2
+     * @return
+     */
+    private static ListNode merge2ListNodes(ListNode n1, ListNode n2) {
+        if (n1 == null) {
+            return n2;
+        }
+        if (n2 == null) {
+            return n1;
+        }
+        if (n1.value < n2.value) {
+            n1.next = merge2ListNodes(n1.next, n2);
+            return n1;
+        } else {
+            n2.next = merge2ListNodes(n1, n2.next);
+            return n2;
+        }
+    }
+
+    /**
+     * 合并k個升序鏈表為一個升序鏈表(或者使用小頂堆)
+     * 先聲明一個空ListNode，遍歷數組merge2賦值給這個空ListNode
+     *
+     * @param listNodes
+     * @return
+     */
+    private static ListNode mergeKListNodes(ListNode[] listNodes) {
+        if (listNodes.length == 0) {
+            return null;
+        }
+        if (listNodes.length == 1) {
+            return listNodes[0];
+        }
+        if (listNodes.length == 2) {
+            return merge2ListNodes(listNodes[0], listNodes[1]);
+        }
+        int mid = listNodes.length / 2;
+        ListNode[] left = new ListNode[mid];
+        for (int i = 0; i < mid; i++) {
+            left[i] = listNodes[i];
+        }
+        ListNode[] right = new ListNode[listNodes.length - mid];
+        for (int i = mid, j = 0; i < listNodes.length; i++, j++) {
+            right[j] = listNodes[i];
+        }
+        return merge2ListNodes(mergeKListNodes(left), mergeKListNodes(right));
+    }
 }
