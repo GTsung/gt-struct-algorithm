@@ -1,5 +1,7 @@
 package com.gt.algorithm.link;
 
+import java.util.LinkedList;
+
 /**
  * @author GTsung
  * @date 2022/1/11
@@ -89,6 +91,32 @@ public class LeetLink {
         slow.next = l.next;
         l.next = null;
         return head;
+    }
+
+    /**
+     * 回文鏈表
+     */
+    private static boolean isHui(ListNode head) {
+        if (head == null) return true;
+        LinkedList<Integer> stack = new LinkedList<>();
+        ListNode h = head;
+        int length = 0;
+        while (h != null) {
+            h = h.next;
+            length++;
+        }
+        h = head;
+        for (int i = 0; i < length / 2; i++) {
+            stack.push(h.value);
+            h = h.next;
+        }
+        while (h!= null) {
+            if (stack.pop() != h.value) {
+                return false;
+            }
+            h = h.next;
+        }
+        return true;
     }
 
 }
