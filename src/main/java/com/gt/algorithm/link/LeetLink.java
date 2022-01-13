@@ -51,18 +51,42 @@ public class LeetLink {
      * 删除链表的倒数第N个节点
      */
     private static ListNode deleteN(ListNode head, int n) {
-        if (head == null) return head;
-        ListNode slow = head;
+        if (head == null || n <= 0) {
+            return head;
+        }
+        ListNode h1 = head;
+        int length = 0;
+        while (h1 != null) {
+            h1 = h1.next;
+            length++;
+        }
+        if (length < n) {
+            return head;
+        }
+        h1 = head;
+        if (length == n) {
+            // delete first node
+            ListNode res = h1.next;
+            h1.next = null;
+            return res;
+        }
+
         ListNode fast = head;
+        ListNode slow = head;
         for (int i = 0; i < n; i++) {
             fast = fast.next;
         }
         while (fast != null) {
-            slow = slow.next;
             fast = fast.next;
+            slow = slow.next;
+        }
+        if (n == 1) {
+            // delete last node
+            slow.next = null;
+            return head;
         }
         ListNode l = slow.next;
-        slow = l.next;
+        slow.next = l.next;
         l.next = null;
         return head;
     }
