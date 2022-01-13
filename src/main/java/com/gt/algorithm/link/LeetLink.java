@@ -110,7 +110,7 @@ public class LeetLink {
             stack.push(h.value);
             h = h.next;
         }
-        while (h!= null) {
+        while (h != null) {
             if (stack.pop() != h.value) {
                 return false;
             }
@@ -121,6 +121,7 @@ public class LeetLink {
 
     /**
      * 找大於、小於、等於區域
+     *
      * @param node
      * @param val
      */
@@ -156,7 +157,6 @@ public class LeetLink {
      * 判斷鏈表是否有環
      */
     private static boolean isCircle(ListNode node) {
-        if (node == null) return false;
         ListNode fast = node;
         ListNode slow = node;
         while (true) {
@@ -167,6 +167,108 @@ public class LeetLink {
             }
         }
         return slow != null;
+    }
+
+    /**
+     * 有環鏈表的入環點
+     */
+    private static ListNode firstToCircle(ListNode node) {
+        if (!isCircle(node)) return null;
+
+        ListNode fast = node;
+        ListNode slow = node;
+        while (true) {
+            fast = fast.next.next;
+            slow = slow.next;
+            if (slow == fast) {
+                break;
+            }
+        }
+        fast = node;
+        while (fast != slow) {
+            fast = fast.next;
+            slow = slow.next;
+        }
+        return fast;
+    }
+
+    /**
+     * 兩個鏈表第一個相交點
+     *
+     * @param n1
+     * @param n2
+     * @return
+     */
+    private ListNode findIntersectNode(ListNode n1, ListNode n2) {
+        if (n1 == null || n2 == null) return null;
+        if (!isCircle(n1) && !isCircle(n2)) {
+            // 都無環
+            return noCircleIntersect(n1, n2);
+        } else if (isCircle(n1) && isCircle(n2)) {
+            // 都有環
+            return circleIntersect(n1, n2);
+        }
+        // 其餘不可能相交
+        return null;
+    }
+
+    /**
+     * 兩個有環鏈表第一個相交點
+     *
+     * @param n1
+     * @param n2
+     * @return
+     */
+    private ListNode circleIntersect(ListNode n1, ListNode n2) {
+        // 查看入環點是否是同一節點
+        ListNode firstN1 = firstToCircle(n1);
+        ListNode firstN2 = firstToCircle(n2);
+        if (firstN1 == firstN2) {
+            // 以這個入環點為終點，類似下面的兩個無環鏈表查找第一個相交點方法
+            if (firstN1 != null) {
+                firstN1.next = null;
+            }
+            return noCircleIntersect(n1, n2);
+        }
+        // 入環點不相同，隨意返回firstN1或firstN2任意一個節點
+        return firstN1;
+    }
+
+    /**
+     * 兩個無環鏈表第一個相交點
+     *
+     * @param n1
+     * @param n2
+     * @return
+     */
+    private ListNode noCircleIntersect(ListNode n1, ListNode n2) {
+        ListNode h1 = n1;
+        ListNode h2 = n2;
+        int l1 = 0;
+        int l2 = 0;
+        while (h1 != null) {
+            l1++;
+            h1 = h1.next;
+        }
+        while (h2 != null) {
+            l2++;
+            h2 = h2.next;
+        }
+        h1 = n1;
+        h2 = n2;
+        int moved = Math.abs(l1 - l2);
+        for (int i = 0; i < moved; i++) {
+            if (l1 < l2) {
+                h2 = h2.next;
+            } else {
+                h1 = h1.next;
+            }
+        }
+        while (h1 != h2) {
+            h1 = h1.next;
+            h2 = h2.next;
+        }
+        return h1;
     }
 
 }
