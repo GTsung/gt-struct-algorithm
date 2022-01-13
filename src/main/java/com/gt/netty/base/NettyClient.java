@@ -1,12 +1,12 @@
 package com.gt.netty.base;
 
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.string.StringEncoder;
 
 import java.net.InetSocketAddress;
 
@@ -16,20 +16,22 @@ import java.net.InetSocketAddress;
  */
 public class NettyClient {
 
-    public static void main(String[] args) {
-        new Bootstrap()
+    public static void main(String[] args) throws Exception {
+        Channel channel = new Bootstrap()
                 .group(new NioEventLoopGroup())
                 .channel(NioSocketChannel.class)
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
-                    protected void initChannel(SocketChannel ch) throws Exception {
-                        ch.pipeline().addLast(new ChannelInboundHandlerAdapter() {
-                            @Override
-                            public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-                                super.channelRead(ctx, msg);
-                            }
-                        });
+                    protected void initChannel(SocketChannel socketChannel) throws Exception {
+                        socketChannel.pipeline().addLast(new StringEncoder());
                     }
-                }).remoteAddress(new InetSocketAddress("localhost", 9000));
+                })
+                .connect(new InetSocketAddress("localhost", 8090))
+                .sync()
+                .channel();
+        System.out.println(channel);
+        channel.writeAndFlush("aasdsadasd");
+        // 此处打断点调试，调用 channel.writeAndFlush(...);
+        System.in.read();
     }
 }
