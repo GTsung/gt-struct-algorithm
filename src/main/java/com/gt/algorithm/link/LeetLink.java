@@ -119,4 +119,38 @@ public class LeetLink {
         return true;
     }
 
+    /**
+     * 找大於、小於、等於區域
+     * @param node
+     * @param val
+     */
+    private static void findArea(ListNode node, int val) {
+        ListNode smallerHeader = null;
+        ListNode smallerTail = null;
+        ListNode biggerHeader = null;
+        ListNode biggerTail = null;
+        ListNode sameHeader = null;
+        ListNode sameTail = null;
+
+        while (node != null) {
+            if (node.value < val) {
+                setNode(node, smallerHeader, smallerTail);
+            } else if (node.value > val) {
+                setNode(node, biggerHeader, biggerTail);
+            } else {
+                setNode(node, sameHeader, sameTail);
+            }
+            node = node.next;
+        }
+    }
+
+    private static void setNode(ListNode node, ListNode headerNode, ListNode tailNode) {
+        if (headerNode == null) {
+            headerNode = tailNode = node;
+        } else {
+            tailNode = tailNode.next = node;
+        }
+    }
+
+
 }
