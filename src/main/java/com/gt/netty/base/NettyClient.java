@@ -9,6 +9,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.string.StringEncoder;
+import lombok.extern.slf4j.Slf4j;
 
 import java.net.InetSocketAddress;
 
@@ -16,6 +17,7 @@ import java.net.InetSocketAddress;
  * @author GTsung
  * @date 2022/1/13
  */
+@Slf4j
 public class NettyClient {
 
     public static void main(String[] args) throws Exception {
@@ -57,7 +59,7 @@ public class NettyClient {
         closeFuture.addListener(new ChannelFutureListener() {
             @Override
             public void operationComplete(ChannelFuture future) throws Exception {
-                System.out.println("處理關閉之後的操作");
+                log.info("處理關閉之後的操作");
             }
         });
     }

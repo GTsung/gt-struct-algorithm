@@ -1,5 +1,7 @@
 package com.gt.netty.sample.netty.non;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.nio.ByteBuffer;
@@ -16,6 +18,7 @@ import java.util.Set;
  * @author GTsung
  * @date 2022/1/11
  */
+@Slf4j
 public class PlainNioServer {
 
     /**
@@ -46,7 +49,7 @@ public class PlainNioServer {
                     client.configureBlocking(false);
                     client.register(selector,
                             SelectionKey.OP_WRITE | SelectionKey.OP_READ, msg.duplicate());
-                    System.out.println("accepted from " + client);
+                    log.info("accepted from " + client);
                 }
                 if (key.isWritable()) {
                     SocketChannel client = (SocketChannel) key.channel();

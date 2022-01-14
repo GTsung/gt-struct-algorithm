@@ -6,7 +6,7 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 import java.nio.charset.Charset;
 
@@ -14,7 +14,7 @@ import java.nio.charset.Charset;
  * @author GTsung
  * @date 2022/1/12
  */
-@Log4j2
+@Slf4j
 public class NettyServer {
 
     public static void main(String[] args) throws InterruptedException {

@@ -5,6 +5,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.Callable;
 
@@ -12,6 +13,7 @@ import java.util.concurrent.Callable;
  * @author GTsung
  * @date 2022/1/14
  */
+@Slf4j
 public class NettyFutureTest {
 
     public static void main(String[] args) throws Exception{
@@ -30,7 +32,7 @@ public class NettyFutureTest {
             @Override
             public void operationComplete(Future<? super Integer> future) throws Exception {
                 // 任務執行完畢回調
-                System.out.println(future.getNow());
+                log.info("{}" ,future.getNow());
             }
         });
     }
