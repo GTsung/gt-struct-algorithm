@@ -322,4 +322,72 @@ public class LeetLink {
         }
         return merge2ListNodes(mergeKListNodes(left), mergeKListNodes(right));
     }
+
+    /**
+     * 每兩個節點進行互換
+     *
+     * @param node
+     * @return
+     */
+    private static ListNode reverseTwoNodes(ListNode node) {
+        ListNode dummyHead = new ListNode(0);
+        dummyHead.next = node;
+        ListNode tmp = dummyHead;
+        while (tmp.next != null && tmp.next.next != null) {
+            ListNode n1 = tmp.next;
+            ListNode n2 = tmp.next.next;
+            n1.next = n2.next;
+            n2.next = n1;
+            tmp.next = n2;
+            tmp = n1;
+        }
+        return dummyHead.next;
+    }
+
+    /**
+     * 給定一個鏈表和一個小於等於鏈表長度的k，k個節點進行互換
+     *
+     * @param head
+     * @param k
+     * @return
+     */
+    private static ListNode reverseKNodes(ListNode head, int k) {
+        ListNode hair = new ListNode(0);
+        hair.next = head;
+        ListNode pre = hair;
+        while (head != null) {
+            ListNode tail = pre;
+            // 查看剩餘長度是否大於等於k
+            for (int i = 0; i < k; i++) {
+                tail = tail.next;
+                if (tail == null) {
+                    return hair.next;
+                }
+            }
+            ListNode next = tail.next;
+            ListNode[] reverse = myReverse(head, tail);
+            head = reverse[0];
+            tail = reverse[1];
+
+            pre.next = head;
+            tail.next = next;
+            pre = tail;
+            head = tail.next;
+        }
+        return hair.next;
+    }
+
+    private static ListNode[] myReverse(ListNode head, ListNode tail) {
+        ListNode prev = tail.next;
+        ListNode p = head;
+        while (prev != tail) {
+            ListNode nex = p.next;
+            p.next = prev;
+            prev = p;
+            p = nex;
+        }
+        return new ListNode[]{tail, head};
+    }
+
+
 }
