@@ -16,6 +16,7 @@ public class UserServiceMemoryImpl implements UserService {
         userMap.put("專業操劉蕭老母", "100");
         userMap.put("專業操劉蕭gay", "120");
         userMap.put("專業操劉蕭妹妹", "110");
+        userMap.put("fucking", "Liu");
     }
 
     @Override
