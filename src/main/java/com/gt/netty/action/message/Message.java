@@ -1,5 +1,7 @@
 package com.gt.netty.action.message;
 
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -8,6 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author GTsung
  * @date 2022/1/15
  */
+@Data
 public abstract class Message implements Serializable {
 
     /**
