@@ -62,7 +62,7 @@ public class ClassTest {
         Method m = Dog.class.getMethod("drink", String.class);
         m.invoke(Dog.class.newInstance(), "ss");
 
-        
+
     }
 
 }
