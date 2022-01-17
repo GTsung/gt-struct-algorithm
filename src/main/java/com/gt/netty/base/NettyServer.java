@@ -27,9 +27,7 @@ public class NettyServer {
         EventLoopGroup worker = new NioEventLoopGroup(2);
 
 
-        new ServerBootstrap()
-                .group(boss, worker)
-                .channel(NioServerSocketChannel.class)
+        new ServerBootstrap().group(boss, worker).channel(NioServerSocketChannel.class)
                 .childHandler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel socketChannel) throws Exception {
@@ -37,23 +35,15 @@ public class NettyServer {
                             @Override
                             public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
                                 ByteBuf buf = (ByteBuf) msg;
-                                System.out.println(buf.toString(Charset.defaultCharset()));
                                 log.info(buf.toString(Charset.defaultCharset()));
-                                ctx.fireChannelRead(msg); // 將消息傳遞給下一個handler
-                            }
-                        })
-                                .addLast(defaultGroup, "group-02", new ChannelInboundHandlerAdapter() {
+                                // 將消息傳遞給下一個handler
+                                ctx.fireChannelRead(msg); }
+                        }).addLast(defaultGroup, "group-02", new ChannelInboundHandlerAdapter() {
                                     @Override
                                     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
                                         ByteBuf buf = (ByteBuf) msg;
-                                        System.out.println(buf.toString(Charset.defaultCharset()));
-                                        log.info(buf.toString(Charset.defaultCharset()));
-                                    }
-                                })
-
-                        ;
-                    }
-                })
+                                        log.info(buf.toString(Charset.defaultCharset())); }
+                                }); }})
                 .bind(8090);
     }
 }
