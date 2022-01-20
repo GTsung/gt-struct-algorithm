@@ -10,7 +10,59 @@ public class PrintTree {
 
     public static void main(String[] args) {
         // 深度遍历即先序遍历
+        printBackDeep(createTree());
         // 宽度遍历
+    }
+
+    // 前序遍歷: 12###10###7###11###19###16###28###
+    private static void printFrontDeep(TreeNode root) {
+        if (root == null) return;
+        System.out.print(root.value + "###");
+        printFrontDeep(root.left);
+        printFrontDeep(root.right);
+    }
+
+    // 中序遍歷: 7###10###11###12###16###19###28###
+    private static void printMiddleDeep(TreeNode root) {
+        if (root == null) return;
+        printMiddleDeep(root.left);
+        System.out.print(root.value + "###");
+        printMiddleDeep(root.right);
+    }
+
+    // 後序遍歷: 7###11###10###16###28###19###12###
+    private static void printBackDeep(TreeNode root) {
+        if (root == null) return;
+        printBackDeep(root.left);
+        printBackDeep(root.right);
+        System.out.print(root.value + "###");
+    }
+
+    /**
+     *             12
+     *       10         19
+     *     7   11    16   28
+     * @return
+     */
+    private static TreeNode createTree() {
+        TreeNode root = new TreeNode(12);
+        TreeNode leftChild01 = new TreeNode(10);
+        TreeNode rightChild01 = new TreeNode(19);
+        TreeNode leftLeftChild0101 = new TreeNode(7);
+        TreeNode leftRightChild0102 = new TreeNode(11);
+        TreeNode rightLeftChild0101 = new TreeNode(16);
+        TreeNode rightRightChild0102 = new TreeNode(28);
+
+        root.left = leftChild01;
+        root.right = rightChild01;
+
+        leftChild01.left = leftLeftChild0101;
+        leftChild01.right = leftRightChild0102;
+
+        rightChild01.left = rightLeftChild0101;
+        rightChild01.right = rightRightChild0102;
+
+        return root;
     }
 
     /**
