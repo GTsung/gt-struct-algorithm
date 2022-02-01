@@ -6,9 +6,9 @@ package com.gt.algorithm.tree;
  */
 public class TreeNode {
 
-    TreeNode left;
-    TreeNode right;
-    int value;
+    public TreeNode left;
+    public TreeNode right;
+    public int value;
 
     public TreeNode(TreeNode left, TreeNode right, int value) {
         this.left = left;

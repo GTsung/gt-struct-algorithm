@@ -1,6 +1,8 @@
 package com.gt.algorithm.tree;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 /**
@@ -68,5 +70,73 @@ public class FindTree {
         return node;
     }
 
+    /**
+     * 根據先序遍歷的數組和中序遍歷的數組生成一個樹
+     */
 
+
+    /**
+     * 給定一個整數n，生成不同的二叉樹
+     * 生成樹首先生成其左子樹和右子樹，然後拼接
+     * 對於整數i(i<n)，它的左子樹為[0, i-1];右子樹為[i+1, n]
+     */
+    public List<TreeNode> generateTree(int n) {
+        if (n == 0) return new LinkedList<>();
+        return generate(1, n);
+    }
+
+    private List<TreeNode> generate(int start, int end) {
+        List<TreeNode> res = new LinkedList<>();
+        if (start > end) {
+            res.add(null);
+            return res;
+        }
+        for (int i = start; i <= end; i++) {
+            List<TreeNode> leftTrees = generate(start, i - 1);
+            List<TreeNode> rightTrees = generate(i + 1, end);
+            // 拼接
+            for (TreeNode left : leftTrees) {
+                for (TreeNode right : rightTrees) {
+                    TreeNode root = new TreeNode(i);
+                    root.left = left;
+                    root.right = right;
+                    res.add(root);
+                }
+            }
+        }
+        return res;
+    }
+
+    /**
+     * 搜索二叉樹錯位，[2,1,3] ---> 應該為[1, 2, 3]
+     * 現在將tree修復，不改變結構
+     * 可以中序遍歷，如果排序正常，則返回否則，將不在正確位置的節點值互換
+     */
+    public void recoverTree(TreeNode root) {
+        List<TreeNode> list = new ArrayList<>();
+        dfs(root, list);
+        TreeNode x = null;
+        TreeNode y = null;
+        for (int i = 0; i < list.size() - 1; i++) {
+            if (list.get(i).value > list.get(i + 1).value) {
+                y = list.get(i + 1);
+                if (x == null) {
+                    x = list.get(i);
+                }
+            }
+        }
+        if (x != null && y != null) {
+            int tmp = x.value;
+            x.value = y.value;
+            y.value = tmp;
+        }
+    }
+
+    // 中序遍歷
+    private void dfs(TreeNode root, List<TreeNode> list) {
+        if (root == null) return;
+        dfs(root.left, list);
+        list.add(root);
+        dfs(root.right, list);
+    }
 }
