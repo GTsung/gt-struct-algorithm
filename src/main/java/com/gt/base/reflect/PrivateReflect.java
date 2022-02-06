@@ -20,7 +20,7 @@ public class PrivateReflect {
         Field name = dogClass.getDeclaredField("name");
         name.setAccessible(true);
         Object o = name.get(dog);
-        
+
         // private method
         Method bark = dogClass.getDeclaredMethod("bark");
         bark.setAccessible(true);
