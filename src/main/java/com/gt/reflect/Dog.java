@@ -35,6 +35,10 @@ public class Dog extends DogFather implements Animal {
         System.out.println("在喝" + water + "," + cola);
     }
 
+    private void bark() {
+        System.out.println("bark");
+    }
+
     @Override
     public void play() {
         System.out.println("play");
