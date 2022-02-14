@@ -1,8 +1,6 @@
 package com.gt.threads;
 
-import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.ForkJoinTask;
-import java.util.concurrent.RecursiveTask;
+import java.util.concurrent.*;
 
 /**
  * @author GTsung
@@ -104,6 +102,72 @@ public class ForkJoinDemo {
             sumTask2.fork();
             // 返回结果
             return sumTask1.join() + sumTask2.join();
+        }
+    }
+
+    /**
+     * 快排
+     */
+
+    private static void testSort() throws Exception {
+        long[] array = {12L, 22L, 1L, 23L};
+        ForkJoinTask sort = new SortTask(array);
+        ForkJoinPool pool = new ForkJoinPool();
+        pool.submit(sort);
+        pool.shutdown();
+        pool.awaitTermination(30, TimeUnit.SECONDS);
+    }
+
+    static class SortTask extends RecursiveAction {
+        final long[] array;
+        final int lo;
+        final int hi;
+
+        private int THRESHOLD = 0;
+
+        public SortTask(long[] array) {
+            this.array = array;
+            this.lo = 0;
+            this.hi = array.length - 1;
+        }
+
+        public SortTask(long[] array, int lo, int hi) {
+            this.array = array;
+            this.lo = lo;
+            this.hi = hi;
+        }
+
+        protected void compute() {
+            if (lo < hi) {
+                int pivot = partition(array, lo, hi);
+                SortTask left = new SortTask(array, lo, pivot - 1);
+                SortTask right = new SortTask(array, pivot + 1, hi);
+                left.fork();
+                right.fork();
+                left.join();
+                right.join();
+            }
+        }
+
+        private int partition(long[] array, int lo, int hi) {
+            long x = array[hi];
+            int i = lo - 1;
+            for (int j = lo; j < hi; j++) {
+                if (array[j] <= x) {
+                    i++;
+                    swap(array, i, j);
+                }
+            }
+            swap(array, i + 1, hi);
+            return i + 1;
+        }
+
+        private void swap(long[] array, int i, int j) {
+            if (i != j) {
+                long temp = array[i];
+                array[i] = array[j];
+                array[j] = temp;
+            }
         }
     }
 }
