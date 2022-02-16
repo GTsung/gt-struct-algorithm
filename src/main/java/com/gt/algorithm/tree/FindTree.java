@@ -1,9 +1,6 @@
 package com.gt.algorithm.tree;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 /**
  * @author GTsung
@@ -139,4 +136,35 @@ public class FindTree {
         list.add(root);
         dfs(root.right, list);
     }
+
+    /**
+     * 給定先序遍歷數組及中序遍歷數組，還原一顆樹
+     */
+    static Map<Integer, Integer> indexMap;
+
+    private static void returnTree(int[] preorder, int[] inorder) {
+        int n = preorder.length;
+        indexMap = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            indexMap.put(inorder[i], i);
+        }
+        buildTree(preorder, 0, n - 1, inorder, 0, n - 1);
+    }
+
+    private static TreeNode buildTree(int[] preorder, int pre_left, int pre_right,
+                                      int[] inorder, int in_left, int in_right) {
+        if (pre_left > pre_right) {
+            return null;
+        }
+        int pre_root = pre_left;
+        int in_root = indexMap.get(preorder[pre_root]);
+
+        TreeNode root = new TreeNode(preorder[pre_root]);
+        int size_left = in_root - in_left;
+        root.left = buildTree(preorder, pre_left + 1, pre_left + size_left, inorder, in_left, in_root - 1);
+        root.right = buildTree(preorder, pre_left + size_left + 1, pre_right, inorder, in_root + 1, in_right);
+        return root;
+    }
+
+
 }
