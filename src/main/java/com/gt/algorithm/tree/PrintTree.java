@@ -39,9 +39,10 @@ public class PrintTree {
     }
 
     /**
-     *             12
-     *       10         19
-     *     7   11    16   28
+     * 12
+     * 10         19
+     * 7   11    16   28
+     *
      * @return
      */
     private static TreeNode createTree() {
@@ -150,9 +151,8 @@ public class PrintTree {
         // 左中右打印值，上一个值为当前值的左子树，因此应该为preValue < curValue
         if (root.value < preValue) {
             return false;
-        } else {
-            preValue = root.value;
         }
+        preValue = root.value;
         return isBST(root.right);
     }
     ///////////////////////////////////////////////////////////////////////////////
