@@ -5,8 +5,8 @@ package com.gt.algorithm.link;
  * @date 2022/1/9
  */
 public class LinkNode {
-    int val;
-    LinkNode next;
+    public int val;
+    public LinkNode next;
 
     public LinkNode(int val) {
         this(val, null);
