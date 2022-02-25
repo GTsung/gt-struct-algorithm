@@ -147,7 +147,7 @@ public class Sample01 {
 
         public Integer poll() {
             if (stack2.isEmpty()) {
-                while(!stack1.isEmpty()) {
+                while (!stack1.isEmpty()) {
                     stack2.push(stack1.pop());
                 }
             }
@@ -166,8 +166,8 @@ public class Sample01 {
      */
     public static int fib(int n) {
         if (n < 2) return n;
-        int a = 0,  b = 0, sum = 1;
-        for (int i = 2; i <= n;i++) {
+        int a = 0, b = 0, sum = 1;
+        for (int i = 2; i <= n; i++) {
             a = b;
             b = sum;
             sum = a + b;
@@ -175,7 +175,248 @@ public class Sample01 {
         return sum;
     }
 
-    public static void main(String[] args) {
+    /**
+     * 把一个数组最开始的若干个元素搬到数组的末尾，我们称之为数组的旋转。
+     * 给你一个可能存在 重复 元素值的数组 numbers ，它原来是一个升序排列的数组，
+     * 并按上述情形进行了一次旋转。请返回旋转数组的最小元素。
+     * 例如，数组 [3,4,5,1,2] 为 [1,2,3,4,5] 的一次旋转，该数组的最小值为1。  
+     */
+    private static int find(int[] arr) {
+        int low = arr[0], high = arr.length - 1;
+        while (low < high) {
+            int pivot = low + (high - low) / 2;
+            if (arr[pivot] < arr[high]) high = pivot;
+            else if (arr[pivot] > arr[high]) low = pivot + 1;
+            else high--;
+        }
+        return arr[low];
+    }
 
+    /**
+     * 给定一个 m x n 二维字符网格 board 和一个字符串单词 word 。
+     * 如果 word 存在于网格中，返回 true ；否则，返回 false 。
+     * 单词必须按照字母顺序，通过相邻的单元格内的字母构成，
+     * 其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。
+     * 同一个单元格内的字母不允许被重复使用。
+     */
+    private static boolean exist(char[][] board, String word) {
+        // dfs+剪枝
+        char[] words = word.toCharArray();
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                if (dfs(board, words, i, j, 0)) return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean dfs(char[][] board, char[] words, int i, int j, int k) {
+        // 判斷邊界,board上下邊界越界或者矩陣中的值與words下標的值不等
+        if (i < 0 || i >= board.length
+                || j < 0 || j >= board[0].length
+                || board[i][j] != words[k]) return false;
+        if (k == words.length - 1) return true;
+        board[i][j] = '\0'; // 將矩陣中的字符設置為空，防止第二次使用
+        boolean res = dfs(board, words, i + 1, j, k + 1)
+                || dfs(board, words, i - 1, j, k + 1)
+                || dfs(board, words, i, j + 1, k + 1)
+                || dfs(board, words, i, j - 1, k + 1);
+        // 回溯的時候賦值回去，方便下次查詢
+        board[i][j] = words[k];
+        return res;
+    }
+
+    /**
+     * 地上有一个m行n列的方格，从坐标 [0,0] 到坐标 [m-1,n-1] 。
+     * 一个机器人从坐标 [0, 0] 的格子开始移动，它每次可以向左、右、上、下移动一格（不能移动到方格外），
+     * 也不能进入行坐标和列坐标的数位之和大于k的格子。
+     * 例如，当k为18时，机器人能够进入方格 [35, 37] ，因为3+5+3+7=18。
+     * 但它不能进入方格 [35, 38]，因为3+5+3+8=19。请问该机器人能够到达多少个格子？
+     */
+    static class Move {
+        int m, n, k;
+        boolean[][] visited;
+
+        public int movingCount(int m, int n, int k) {
+            this.m = m;
+            this.n = n;
+            this.k = k;
+            this.visited = new boolean[m][n];
+            return dfsMove(0, 0, 0, 0);
+        }
+
+        // i,j ----> 坐標; si ---> i的數位和  sj ---> j的數位和
+        private int dfsMove(int i, int j, int si, int sj) {
+            if (i >= m || j >= n || k < si + sj || visited[i][j]) return 0;
+            visited[i][j] = true;
+            return 1 + dfsMove(i + 1, j, (i + 1) % 10 != 0 ? si + 1 : si - 8, sj)
+                    + dfsMove(i, j + 1, si, (j + 1) % 10 != 0 ? sj + 1 : sj - 8);
+        }
+    }
+
+    /**
+     * 给你一根长度为 n 的绳子，请把绳子剪成整数长度的 m 段（m、n都是整数，n>1并且m>1），
+     * 每段绳子的长度记为 k[0],k[1]...k[m-1] 。请问 k[0]*k[1]*...*k[m-1] 可能的最大乘积是多少？
+     * 例如，当绳子的长度是8时，我们把它剪成长度分别为2、3、3的三段，此时得到的最大乘积是18。
+     */
+    private static int cuttingRope(int n) {
+        // 將每段繩子切為長度為3的片段最優，剩下的一段有三個取值
+        // 為2：不再拆分
+        // 為1: 將一段長度為3的繩子切割為2和1兩段，長度為1的與這段合并；即 2 * 2 > 1 * 3
+        if (n <= 3) return n - 1;
+        int a = n / 3, b = n % 3;
+        if (b == 0) return (int) Math.pow(3, a);
+        if (b == 1) return (int) (Math.pow(3, a - 1) * 4);
+        return (int) (Math.pow(3, a) * 2);
+    }
+
+    /**
+     * 编写一个函数，输入是一个无符号整数（以二进制串的形式），
+     * 返回其二进制表达式中数字位数为 '1' 的个数（也被称为 汉明重量).）。
+     */
+    private static int hammingWeight(int n) {
+        int ret = 0;
+        for (int i = 0; i < 32; i++) {
+            if ((n & (1 << i)) != 0) {
+                ret++;
+            }
+        }
+        return ret;
+    }
+
+    /**
+     * 实现 pow(x, n) ，即计算 x 的 n 次幂函数（即，xn）。不得使用库函数，同时不需要考虑大数问题。
+     */
+    private static double myPow(double x, int n) {
+        if (x == 0) return 0;
+        long b = n;
+        double res = 1.0;
+        if (b < 0) {
+            x = 1 / x;
+            b = -b;
+        }
+        while (b > 0) {
+            if ((b & 1) == 1) res *= x;
+            x *= x;
+            b >>= 1;
+        }
+        return res;
+    }
+
+    /**
+     * 输入数字 n，按顺序打印出从 1 到最大的 n 位十进制数。比如输入 3，则打印出 1、2、3 一直到最大的 3 位数 999。
+     */
+    private static int[] print(int n) {
+        int end = (int) (Math.pow(10, n) - 1);
+        int[] res = new int[end];
+        for (int i = 0; i < end; i++) {
+            res[i] = i + 1;
+        }
+        return res;
+    }
+
+    /**
+     * 给定单向链表的头指针和一个要删除的节点的值，定义一个函数删除该节点。
+     * 返回删除后的链表的头节点
+     */
+    private static LinkNode delete(LinkNode head, int val) {
+        if (head == null) return head;
+        if (head.val == val) return head.next;
+        LinkNode pre = head, current = head.next;
+        while (current != null && current.val != val) {
+            pre = current;
+            current = current.next;
+        }
+        if (current != null) {
+            pre.next = current.next;
+        }
+        return head;
+    }
+
+    /**
+     * 输入一个整数数组，实现一个函数来调整该数组中数字的顺序，使得所有奇数在数组的前半部分，所有偶数在数组的后半部分。
+     */
+    private static int[] sort(int[] arr) {
+        int left = 0;
+        int right = arr.length - 1;
+        while (left < right) {
+            if (left < right && arr[left] % 2 == 1) {
+                left++;
+            }
+            if (left < right && arr[right] % 2 == 0) {
+                right--;
+            }
+            if (left < right && arr[left] % 2 == 0 && arr[right] % 2 == 1) {
+                int temp = arr[left];
+                arr[left] = arr[right];
+                arr[right] = temp;
+            }
+        }
+        return arr;
+    }
+
+    /**
+     * 输入一个链表，输出该链表中倒数第k个节点。为了符合大多数人的习惯，本题从1开始计数，即链表的尾节点是倒数第1个节点。
+     * 例如，一个链表有 6 个节点，从头节点开始，它们的值依次是 1、2、3、4、5、6。这个链表的倒数第 3 个节点是值为 4 的节点。
+     */
+    private static LinkNode getKthFromEnd(LinkNode head, int k) {
+        LinkNode fast = head;
+        LinkNode slow = head;
+        for (int i = 0; i < k; i++) {
+            fast = fast.next;
+        }
+        while (fast != null) {
+            fast = fast.next;
+            slow = slow.next;
+        }
+        return slow;
+    }
+
+    /**
+     * 输入两个递增排序的链表，合并这两个链表并使新链表中的节点仍然是递增排序的。
+     */
+    private static LinkNode mergeTwoLink(LinkNode l1, LinkNode l2) {
+        LinkNode head = new LinkNode(0), dum = head;
+        while (l1 != null && l2 != null) {
+            if (l1.val < l2.val) {
+                dum.next = new LinkNode(l1.val);
+                l1 = l1.next;
+            } else {
+                dum.next = new LinkNode(l2.val);
+                l2 = l2.next;
+            }
+            dum = dum.next;
+        }
+        dum.next = l1 == null ? l2 : l1;
+        return head.next;
+    }
+
+    /**
+     * 输入两棵二叉树A和B，判断B是不是A的子结构。(约定空树不是任意一个树的子结构)
+     * B是A的子结构， 即 A中有出现和B相同的结构和节点值。
+     */
+    private static boolean isSubTree(TreeNode a, TreeNode b) {
+        return (a != null && b != null) && (rec(a, b) || isSubTree(a.left, b) || isSubTree(a.right, b));
+    }
+
+    private static boolean rec(TreeNode a, TreeNode b) {
+        if (b == null) return true; // b已經走完則返回true
+        if (a == null || a.value != b.value) return false; // a走完表示不匹配
+        return rec(a.left, b.left) && rec(a.right, b.right);
+    }
+
+    /**
+     * 请完成一个函数，输入一个二叉树，该函数输出它的镜像。
+     */
+    private static TreeNode mirrorTree(TreeNode root) {
+        if (root == null) return root;
+        TreeNode left = mirrorTree(root.left);
+        TreeNode right = mirrorTree(root.right);
+        root.left = right;
+        root.right = left;
+        return root;
+    }
+
+    public static void main(String[] args) {
     }
 }
