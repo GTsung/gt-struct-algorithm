@@ -18,6 +18,20 @@ public class ExecutorDemo {
         }
         countDown.await();
         threadPool.shutdown();
+
+        Future<?> submit = threadPool.submit(new Task());
+
+        // LinkedBlockingQueue,coreThread = maxThread
+        Executors.newFixedThreadPool(1);
+
+        // only 1 Thread, 其他與newFixedThreadPool一致
+        Executors.newSingleThreadExecutor();
+
+        // SynchronousQueue
+        Executors.newCachedThreadPool();
+
+        // DelayedWorkQueue
+        Executors.newScheduledThreadPool(12);
     }
 
     static class Task implements Runnable {
