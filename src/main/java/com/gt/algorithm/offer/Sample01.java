@@ -417,6 +417,43 @@ public class Sample01 {
         return root;
     }
 
+    /**
+     * 请实现一个函数，用来判断一棵二叉树是不是对称的。如果一棵二叉树和它的镜像一样，那么它是对称的。
+     */
+    private static boolean isSame(TreeNode root) {
+        return root == null || same(root.left, root.right);
+    }
+
+    private static boolean same(TreeNode left, TreeNode right) {
+        if (left == null && right == null) return true;
+        if (left != null && right == null
+                || left == null && right != null
+                || left.value != right.value) return false;
+        return same(left.left, right.right) && same(left.right, right.left);
+    }
+
+    /**
+     * 输入一个整数数组，判断该数组是不是某二叉搜索树的后序遍历结果。
+     * 如果是则返回 true，否则返回 false。假设输入的数组的任意两个数字都互不相同。
+     */
+    private static boolean verifyPostOrder(int[] postOrder) {
+        // 後序遍歷的數組最後一個元素是根
+        return recur(postOrder, 0, postOrder.length - 1);
+    }
+
+    private static boolean recur(int[] postOrder, int i, int j) {
+        if (i >= j) return true;
+        int p = i;
+        // 找到右子樹的第一個下標
+        while (postOrder[p] < postOrder[j]) p++;
+        int m = p;
+        while (postOrder[p] > postOrder[j]) p++;
+        // 比較p是否為最後一個下標,且比較左子樹和右子樹
+        return p == j && recur(postOrder, i, m - 1) && recur(postOrder, m, j - 1);
+    }
+
+
+
     public static void main(String[] args) {
     }
 }
