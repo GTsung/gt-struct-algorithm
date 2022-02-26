@@ -452,7 +452,170 @@ public class Sample01 {
         return p == j && recur(postOrder, i, m - 1) && recur(postOrder, m, j - 1);
     }
 
+    /**
+     * 给你二叉树的根节点 root 和一个整数目标和 targetSum ，
+     * 找出所有 从根节点到叶子节点 路径总和等于给定目标和的路径。
+     */
+    List<List<Integer>> res = new LinkedList<>();
+    LinkedList<Integer> path = new LinkedList<>();
 
+    private List<List<Integer>> pathSum(TreeNode root, int target) {
+        recurFind(root, target);
+        return res;
+    }
+
+    private void recurFind(TreeNode root, int target) {
+        if (root == null) return;
+        path.add(root.value);
+        target -= root.value;
+        if (target == 0 && root.left == null && root.right == null) {
+            res.add(new LinkedList<>(path));
+        }
+        recurFind(root.left, target);
+        recurFind(root.right, target);
+        path.removeLast();
+    }
+
+    /**
+     * 请实现 copyRandomList 函数，复制一个复杂链表。
+     * 在复杂链表中，每个节点除了有一个 next 指针指向下一个节点，
+     * 还有一个 random 指针指向链表中的任意节点或者 null。
+     */
+    static class Node {
+        int val;
+        Node next, random;
+
+        public Node(int val) {
+            this.val = val;
+            this.next = null;
+            this.random = null;
+        }
+    }
+
+    private Node copyRandomList(Node head) {
+        if (head == null) return null;
+        Node cur = head;
+        Map<Node, Node> map = new HashMap<>();
+        while (cur != null) {
+            map.put(cur, new Node(cur.val));
+            cur = cur.next;
+        }
+        cur = head;
+        while (cur != null) {
+            map.get(cur).next = map.get(cur.next);
+            map.get(cur).random = map.get(cur.random);
+            cur = cur.next;
+        }
+        return map.get(head);
+    }
+
+    /**
+     * 输入一棵二叉搜索树，将该二叉搜索树转换成一个排序的循环双向链表。
+     * 要求不能创建任何新的节点，只能调整树中节点指针的指向。
+     */
+    static class Solution {
+        TreeNode pre, head;
+
+        private TreeNode treeToDoublyList(TreeNode root) {
+            if (root == null) return null;
+            ds(root); // 中序遍歷
+            head.left = pre;
+            pre.right = head;
+            return head;
+        }
+
+        void ds(TreeNode cur) {
+            if (cur == null) return;
+            ds(cur.left);
+            if (pre != null) pre.right = cur;
+            else head = cur;
+            cur.left = pre;
+            pre = cur;
+            ds(cur.right);
+        }
+
+    }
+
+    /**
+     * 输入一个整型数组，数组中的一个或连续多个整数组成一个子数组。求所有子数组的和的最大值。
+     * 要求时间复杂度为O(n)。
+     */
+    private int maxSubArray(int[] nums) {
+        int res = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            nums[i] += Math.max(0, nums[i - 1]);
+            res = Math.max(res, nums[i]);
+        }
+        return res;
+    }
+
+    /**
+     * 输入一个非负整数数组，把数组里所有数字拼接起来排成一个数，
+     * 打印能拼接出的所有数字中最小的一个。
+     */
+    private void sortMin(int[] arr) {
+        // 拼接數組中的元素，要求拼接的值最小，本意就是排序
+    }
+
+    /**
+     * 请从字符串中找出一个最长的不包含重复字符的子字符串，计算该最长子字符串的长度。
+     */
+    private int findMaxNum(String str) {
+        Map<Character, Integer> map = new HashMap<>();
+        int res = 0, j = -1;
+        for (int i = 0; i < str.length(); i++) {
+            if (map.containsKey(str.charAt(i))) {
+                j = Math.max(j, map.get(str.charAt(i)));
+            }
+            map.put(str.charAt(i), i);
+            res = Math.max(res, i - j);
+        }
+        return res;
+    }
+
+    /**
+     * 在一个 m*n 的棋盘的每一格都放有一个礼物，每个礼物都有一定的价值（价值大于 0）。
+     * 你可以从棋盘的左上角开始拿格子里的礼物，并每次向右或者向下移动一格、直到到达棋盘的右下角。
+     * 给定一个棋盘及其上面的礼物的价值，请计算你最多能拿到多少价值的礼物？
+     */
+    private int maxVal(int[][] grid) {
+        int m = grid.length, n = grid[0].length;
+        for (int j = 1; j < n; j++) {
+            grid[0][j] += grid[0][j - 1];
+        }
+        for (int i = 1; i < m; i++) {
+            grid[i][0] += grid[i - 1][0];
+        }
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                grid[i][j] += Math.max(grid[i][j-1], grid[i-1][j]);
+            }
+        }
+        return grid[m-1][n-1];
+    }
+
+    /**
+     * 我们把只包含质因子 2、3 和 5 的数称作丑数（Ugly Number）。求按从小到大的顺序的第 n 个丑数。
+     */
+    private int findUglyInN(int n) {
+        int[] factors = {2, 3, 5};
+        Set<Long> seen = new HashSet<>();
+        PriorityQueue<Long> heap = new PriorityQueue<>();
+        seen.add(1L);
+        heap.offer(1L);
+        int ugly = 0;
+        for (int i = 0; i < n; i++) {
+            long curr = heap.poll();
+            ugly = (int) curr;
+            for (int factor : factors) {
+                long next = curr * factor;
+                if (seen.add(next)) {
+                    heap.offer(next);
+                }
+            }
+        }
+        return ugly;
+    }
 
     public static void main(String[] args) {
     }
