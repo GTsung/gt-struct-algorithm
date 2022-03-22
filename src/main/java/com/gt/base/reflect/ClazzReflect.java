@@ -51,5 +51,7 @@ public class ClazzReflect {
 
         Annotation[] annotations = clazz.getAnnotations();
 
+        boolean annotationPresent = clazz.isAnnotationPresent(MyAnnotation.class);
+
     }
 }
