@@ -4,7 +4,7 @@ package com.gt.base.lang;
  * @author GTsung
  * @date 2022/3/26
  */
-public class ThreadTest {
+public class ThreadLocalTest {
 
     private static ThreadLocal<String> threadLocal = new ThreadLocal<>();
 
