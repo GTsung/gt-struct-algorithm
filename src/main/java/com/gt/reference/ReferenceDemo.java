@@ -20,6 +20,7 @@ public class ReferenceDemo {
 
         System.gc();
 
+
         Reference reference1 = queue.remove();
         System.out.println(reference1);
 
