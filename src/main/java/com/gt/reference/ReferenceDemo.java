@@ -21,7 +21,8 @@ public class ReferenceDemo {
         System.gc();
 
 
-        Reference reference1 = queue.remove();
+//        Reference reference1 = queue.remove();
+        Reference reference1 = queue.poll();
         System.out.println(reference1);
 
         // WeakHashMap， Entry继承了WeakReference
