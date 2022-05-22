@@ -55,13 +55,15 @@ public class SemaphoreTwoDemo {
                 // 同时读取，因此需要加锁
                 lock.lock();
                 try {
+                    Thread.sleep(100);
+                    System.out.println(Thread.currentThread().getName() + ",time=" + System.currentTimeMillis());
                     int count = semaphoreTwoDemo.getCount() + 1;
                     semaphoreTwoDemo.setCount(count);
                 } finally {
                     lock.unlock();
                 }
-                Thread.sleep(100);
-                System.out.println(Thread.currentThread().getName());
+
+
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
