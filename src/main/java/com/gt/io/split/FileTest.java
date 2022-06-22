@@ -3,6 +3,7 @@ package com.gt.io.split;
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.charset.StandardCharsets;
 
 public class FileTest {
 
@@ -10,8 +11,47 @@ public class FileTest {
 //        write();
 //        write2();
 
-        System.out.println((byte)'\n');
+//        byteBufferRead();
 
+        write3();
+    }
+
+    private static void write3() throws Exception {
+        FileInputStream fin = new FileInputStream("a.txt");
+        BufferedReader br = new BufferedReader(new InputStreamReader(fin));
+        ByteBuffer byteBuffer = ByteBuffer.allocate(1024*10);
+        String lineStr = null;
+        int index = 0;
+        while ((lineStr = br.readLine()) != null) {
+            lineStr = lineStr + "\n";
+            byte[] bytes = lineStr.getBytes(StandardCharsets.UTF_8);
+            long length = bytes.length;
+            if (byteBuffer.remaining() < length) {
+                byteBuffer.flip();
+                FileOutputStream fileOutputStream = new FileOutputStream("b" + index++ + ".txt");
+                FileChannel fileChannel = fileOutputStream.getChannel();
+                fileChannel.write(byteBuffer);
+                fileOutputStream.close();
+                byteBuffer.clear();
+            }
+            byteBuffer.put(bytes);
+        }
+        br.close();
+        fin.close();
+    }
+
+    private static void byteBufferRead() {
+        ByteBuffer byteBuffer = ByteBuffer.allocate(1024*10);
+        StringBuilder sb = new StringBuilder();
+        sb.append("12");
+        byteBuffer.put(sb.toString().getBytes(StandardCharsets.UTF_8));
+        sb.delete(0, sb.length());
+        sb.append("23");
+        byteBuffer.put(sb.toString().getBytes(StandardCharsets.UTF_8));
+        byteBuffer.rewind();
+        byte[] bytes = new byte[1024];
+        byteBuffer.get(bytes);
+        System.out.println(new String(bytes));
     }
 
     private static void write2() throws IOException {
