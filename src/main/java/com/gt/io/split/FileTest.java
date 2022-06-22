@@ -4,6 +4,9 @@ import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class FileTest {
 
@@ -13,7 +16,33 @@ public class FileTest {
 
 //        byteBufferRead();
 
-        write3();
+//        write3();
+
+        write4();
+
+    }
+
+    private static void write4() throws Exception {
+        Path path = Paths.get("a.txt");
+        try (BufferedReader reader = Files.newBufferedReader(path)) {
+            ByteBuffer byteBuffer = ByteBuffer.allocate(1024*10);
+            String lineStr = null;
+            int index = 0;
+            while ((lineStr = reader.readLine()) != null) {
+                lineStr = lineStr + "\n";
+                byte[] bytes = lineStr.getBytes(StandardCharsets.UTF_8);
+                long length = bytes.length;
+                if (byteBuffer.remaining() < length) {
+                    byteBuffer.flip();
+                    FileOutputStream fileOutputStream = new FileOutputStream("b" + index++ + ".txt");
+                    FileChannel fileChannel = fileOutputStream.getChannel();
+                    fileChannel.write(byteBuffer);
+                    fileOutputStream.close();
+                    byteBuffer.clear();
+                }
+                byteBuffer.put(bytes);
+            }
+        }
     }
 
     private static void write3() throws Exception {
