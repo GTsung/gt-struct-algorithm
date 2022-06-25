@@ -18,8 +18,19 @@ public class FileTest {
 
 //        write3();
 
-        write4();
+//        write4();
 
+        read1();
+    }
+
+    private static void read1() throws Exception {
+        LineNumberReader lineNumberReader = new LineNumberReader(new InputStreamReader(
+                new FileInputStream("a.txt")));
+        int read = 0;
+        while ((read = lineNumberReader.read()) != -1) {
+            read = lineNumberReader.read();
+        }
+        System.out.println(lineNumberReader.getLineNumber());
     }
 
     private static void write4() throws Exception {
