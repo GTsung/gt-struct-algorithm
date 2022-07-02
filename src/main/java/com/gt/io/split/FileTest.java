@@ -20,11 +20,11 @@ public class FileTest {
 
 //        write4();
 
-//        read1();
+        read1();
 
 //        writeMb();
 
-        writeSlipMb();
+//        writeSlipMb();
     }
 
     private static void writeMb() throws Exception {
